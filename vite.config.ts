@@ -25,8 +25,11 @@ function fredProxyConfig(env: Record<string, string>) {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const fred = fredProxyConfig(env)
+  /** GitHub project Pages: https://<user>.github.io/<repo>/ (set in CI or .env) */
+  const base = process.env.VITE_PAGES_BASE || env.VITE_PAGES_BASE || '/'
 
   return {
+    base,
     plugins: [react()],
     server: {
       proxy: {

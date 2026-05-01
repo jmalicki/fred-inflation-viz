@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { InflationChart } from './components/InflationChart'
-import {
-  fetchFredObservations,
-  INFLATION_SERIES,
-  observationsToYoY,
-  type InflationPoint,
-  type InflationSeriesId,
-} from './fred'
+import { INFLATION_SERIES, loadInflationSeries, type InflationPoint, type InflationSeriesId } from './fred'
 import './App.css'
 
 export default function App() {
@@ -14,20 +8,21 @@ export default function App() {
   const [points, setPoints] = useState<InflationPoint[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [usingDemo, setUsingDemo] = useState(false)
 
   const meta = useMemo(() => INFLATION_SERIES.find((s) => s.id === seriesId)!, [seriesId])
 
   const load = useCallback(async (id: InflationSeriesId) => {
     setLoading(true)
     setError(null)
+    setUsingDemo(false)
     try {
-      const obs = await fetchFredObservations(id)
-      const cfg = INFLATION_SERIES.find((s) => s.id === id)!
-      const yoy = observationsToYoY(obs, cfg.yoyMonths)
-      setPoints(yoy)
+      const { points: next, source } = await loadInflationSeries(id)
+      setPoints(next)
+      setUsingDemo(source === 'demo')
     } catch (e) {
       setPoints([])
-      setError(e instanceof Error ? e.message : 'Could not load FRED data.')
+      setError(e instanceof Error ? e.message : 'Could not load data.')
     } finally {
       setLoading(false)
     }
@@ -45,11 +40,12 @@ export default function App() {
         <div className="app-header-text">
           <h1>U.S. inflation from FRED</h1>
           <p className="lede">
-            Interactive React + D3 chart. Data from the{' '}
+            Interactive React + D3 chart. With a local API key, data loads from the{' '}
             <a href="https://fred.stlouisfed.org/" target="_blank" rel="noreferrer">
               St. Louis Fed FRED® API
             </a>
-            . Brush the timeline below the main chart; hover for exact readings.
+            ; on static hosts (for example GitHub Pages) you still get an interactive chart from bundled sample
+            series. Brush the mini-chart below to zoom; hover the main chart for values.
           </p>
         </div>
       </header>
@@ -67,6 +63,14 @@ export default function App() {
           </button>
         ))}
       </section>
+
+      {usingDemo && !error && (
+        <div className="banner banner-demo" role="status">
+          <strong>Sample data.</strong> FRED is not reachable from this static host (or the proxy is unavailable), so
+          the chart uses bundled placeholder YoY series for each tab. Run <code>npm run dev</code> with{' '}
+          <code>FRED_API_KEY</code> in <code>.env</code> for live St. Louis Fed figures.
+        </div>
+      )}
 
       {error && (
         <div className="banner banner-error" role="alert">
@@ -96,7 +100,9 @@ export default function App() {
 
       <footer className="footer">
         <span>
-          Source: Federal Reserve Economic Data (FRED). YoY % is computed from the published index (12-month change).
+          {usingDemo
+            ? 'Sample series for layout and interaction; not official FRED releases.'
+            : 'Source: Federal Reserve Economic Data (FRED). YoY % is computed from the published index (12-month change).'}
         </span>
       </footer>
     </div>

@@ -25,6 +25,35 @@ export const INFLATION_SERIES = [
 
 export type InflationSeriesId = (typeof INFLATION_SERIES)[number]['id']
 
+export type DataSource = 'fred' | 'demo'
+
+type DemoRow = { date: string; value: number }
+
+async function fetchDemoSeries(seriesId: InflationSeriesId): Promise<InflationPoint[]> {
+  const res = await fetch(`${import.meta.env.BASE_URL}demo/${seriesId}.json`)
+  if (!res.ok) throw new Error(`Demo bundle missing (${res.status})`)
+  const rows = (await res.json()) as DemoRow[]
+  return rows.map((r) => ({
+    date: new Date(r.date + 'T12:00:00'),
+    value: r.value,
+  }))
+}
+
+/** Live FRED when the dev/preview proxy works; otherwise static demo JSON shipped with the app. */
+export async function loadInflationSeries(
+  seriesId: InflationSeriesId,
+): Promise<{ points: InflationPoint[]; source: DataSource }> {
+  const cfg = INFLATION_SERIES.find((s) => s.id === seriesId)!
+  try {
+    const obs = await fetchFredObservations(seriesId)
+    const points = observationsToYoY(obs, cfg.yoyMonths)
+    return { points, source: 'fred' }
+  } catch {
+    const points = await fetchDemoSeries(seriesId)
+    return { points, source: 'demo' }
+  }
+}
+
 type FredObservationsResponse = {
   observations?: { date: string; value: string }[]
   error_message?: string

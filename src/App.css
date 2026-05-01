@@ -93,6 +93,11 @@
   background: rgba(220, 38, 38, 0.06);
 }
 
+.banner-demo {
+  border-color: rgba(59, 130, 246, 0.35);
+  background: rgba(59, 130, 246, 0.08);
+}
+
 .banner-hint {
   margin: 0.75rem 0 0;
   color: var(--muted);

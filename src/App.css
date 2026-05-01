@@ -1,0 +1,160 @@
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  text-align: left;
+}
+
+.app-header-text h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.65rem, 3vw, 2.1rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.lede {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.lede a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.lede a:hover {
+  text-decoration: underline;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.75rem 0 1.25rem;
+}
+
+.pill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.pill:hover {
+  border-color: var(--accent-border);
+}
+
+.pill-active {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.pill-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.pill-sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.status {
+  margin: 1rem 0;
+  color: var(--muted);
+}
+
+.banner {
+  padding: 1rem 1.1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.banner-error {
+  border-color: rgba(220, 38, 38, 0.35);
+  background: rgba(220, 38, 38, 0.06);
+}
+
+.banner-hint {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.banner code {
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: var(--code-bg);
+}
+
+.figure {
+  margin: 0;
+  padding: 0;
+}
+
+.figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.figcaption-title {
+  font-weight: 650;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.figcaption-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.inflation-chart {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 0.75rem 0.5rem 0.5rem;
+  box-sizing: border-box;
+}
+
+.inflation-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.inflation-chart .brush .selection {
+  fill: var(--accent);
+  fill-opacity: 0.18;
+  stroke: var(--accent);
+  stroke-opacity: 0.5;
+}
+
+.footer {
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  max-width: 70ch;
+  line-height: 1.45;
+}

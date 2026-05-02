@@ -7,6 +7,20 @@ Interactive charts for CPI, core CPI, and PCE year-over-year inflation using the
 1. Copy `.env.example` to `.env` and set `FRED_API_KEY` ([get a key](https://fred.stlouisfed.org/docs/api/api_key.html)).
 2. `npm install` then `npm run dev`.
 
+### Save raw FRED JSON locally
+
+With `FRED_API_KEY` in `.env` (or in the environment), run:
+
+```bash
+npm run fred:download
+```
+
+That writes full `series/observations` API responses under `data/fred/snapshots/<timestamp>/` (`CPIAUCSL.json`, `CPILFESL.json`, `PCEPI.json`, plus `manifest.json`). Use `--env-file` if your key lives in another file:
+
+```bash
+node scripts/download-fred.mjs --env-file ~/.secrets/fred.env
+```
+
 The Vite dev server proxies `/fred-proxy` to `api.stlouisfed.org` so the browser avoids FRED CORS limits. Use `npm run preview` after `npm run build` for the same proxy locally.
 
 ## Stack
